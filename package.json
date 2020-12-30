@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/AlexanderASH/nodejs-pokeAPI/issues"
   },
-  "homepage": "https://github.com/AlexanderASH/nodejs-pokeAPI#readme"
+  "homepage": "https://github.com/AlexanderASH/nodejs-pokeAPI#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
