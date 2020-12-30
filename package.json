@@ -1,0 +1,19 @@
+{
+  "name": "nodejs-pokeapi",
+  "version": "1.0.0",
+  "description": "Manejo de APIS",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexanderASH/nodejs-pokeAPI.git"
+  },
+  "author": "Alexander Sanchez Herbas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlexanderASH/nodejs-pokeAPI/issues"
+  },
+  "homepage": "https://github.com/AlexanderASH/nodejs-pokeAPI#readme"
+}
