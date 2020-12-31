@@ -1,6 +1,18 @@
 
 const express = require('express');
+const bodyParser = require('body-parser');
+const passport = require('passport');
+const jwt = require('jsonwebtoken');
+const userController = require('./controllers/users');
+
+userController.registerUser('pcua', 'root2020');
+
+// Llamamos a la funcuin de auth.js
+require('./auth')(passport);
+
 const app = express();
+app.use(bodyParser.json());
+
 const port = 3000;
 
 app.get('/',(req, res) => {
@@ -9,11 +21,40 @@ app.get('/',(req, res) => {
     res.status(200).send('Hello World');
 });
 
+app.post('/login', (req, res) => {
+    if(!req.body){
+        return res.status(400).json({
+            message: 'Missing data'
+        });
+    }else if(!req.body.user || !req.body.password){
+        return res.status(400).json({
+            message: 'Missing data'
+        });
+    }
+    // Comprobamos credenciales
+    userController.checkUserCredentials(req.body.user, req.body.password, (err, result) => {
+        // Si no son validas error
+        if(err || !result){
+            return res.status(401).json({
+                message: 'Invalid credentials'
+            });
+        }
+        // Si son validas generamos un JWT y lo develvemos
+        const token = jwt.sign({
+            userId: result
+        }, 'secretPassword');
+
+        res.status(200).json({
+            token: token
+        });
+    });
+});
+
 app.post('/team/pokemons', (req, res) => {
     res.status(200).send('Hello World');
 });
 
-app.get('/team', (req, res) => {
+app.get('/team', passport.authenticate('jwt', {session: false}), (req, res) => {
     res.status(200).send('Hello World');
 });
 
