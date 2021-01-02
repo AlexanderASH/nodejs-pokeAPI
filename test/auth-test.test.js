@@ -6,6 +6,14 @@ chai.use(chaiHttp);
 
 const app = require('../server').app;
 
+const userController = require('../controllers/users');
+
+before((done) => {
+    userController.registerUser('pcua', 'root2020');
+    userController.registerUser('wendy', 'root2020');
+    done();
+});
+
 describe('Suite de pruebas auth', () => {
     it('should return 401 when no jwt token available', (done) => {
         // Cuando la llamada no tiene correctamente la llave
@@ -58,4 +66,9 @@ describe('Suite de pruebas auth', () => {
             }
         );
     });
+});
+
+after((done) => {
+    userController.cleanUpUsers();
+    done();
 });

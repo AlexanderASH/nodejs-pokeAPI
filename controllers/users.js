@@ -2,7 +2,11 @@ const uuid = require('uuid');
 const crypto = require('../crypto.js');
 const teams = require('../controllers/teams');
 
-const usersDataBase = {};
+let usersDataBase = {};
+
+const cleanUpUsers = () => {
+    usersDataBase = {};
+}
 
 const registerUser = (userName, password) => {
     let hashedPwd = crypto.hashPasswordSync(password);
@@ -41,6 +45,7 @@ const checkUserCredentials = (userName, password, done) => {
     }
 }
 
+exports.cleanUpUsers = cleanUpUsers;
 exports.registerUser = registerUser;
 exports.getUser = getUser;
 exports.getUserIdFromUserName = getUserIdFromUserName;

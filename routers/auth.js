@@ -5,8 +5,6 @@ const jwt = require('jsonwebtoken');
 // Controllers
 const userController = require('../controllers/users');
 
-userController.registerUser('pcua', 'root2020');
-
 router.route('/')
     .get((req, res) => {
         res.send('GET Auth router');
