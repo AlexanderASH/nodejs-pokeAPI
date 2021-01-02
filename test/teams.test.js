@@ -92,6 +92,43 @@ describe('Suite de prueba teams',() => {
             }
         );
     });
+    it('should return the pokedex number', (done) => {
+        let team = [{name: 'Charizard'}, {name: 'Blastoise'}, {name: 'Pikachu'}];
+        chai.request(app)
+            .post('/auth/login')
+            .set('Content-type', 'application/json')
+            .send({user: 'pcua', password: 'root2020'})
+            .end((err, res) => {
+                let token = res.body.token;
+                chai.assert.equal(res.status, 200);
+                chai.request(app)
+                    .put('/teams')
+                    .send({team: team})
+                    .set('Authorization', `JWT ${token}`)
+                    .end((err, res) => {
+                        chai.request(app)
+                            .delete('/teams/pokemons/1')
+                            .set('Authorization', `JWT ${token}`)
+                            .end((err, res) => {
+                                chai.request(app)
+                                    .get('/teams')
+                                    .set('Authorization', `JWT ${token}`)
+                                    .end((err, res) => {
+                                        // Tiene equipo con Charizar y Blastoise
+                                        // { trainer: 'pcua', team: [pokemons]}
+                                        chai.assert.equal(res.status, 200);
+                                        chai.assert.equal(res.body.trainer, 'pcua');
+                                        chai.assert.equal(res.body.team.length, team.length - 1);
+                                        done();
+                                    }
+                                );
+                            }
+                        );
+                    }
+                );
+            }
+        );
+    });
 });
 
 // Se ejecuta despues de un describe
