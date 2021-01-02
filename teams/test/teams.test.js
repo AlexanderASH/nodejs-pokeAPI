@@ -3,10 +3,10 @@ const chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
 
-const app = require('../server').app;
+const app = require('../../server').app;
 
-const userController = require('../controllers/users');
-const teamController = require('../controllers/teams');
+const userController = require('../../auth/users.controller');
+const teamController = require('../teams.controller');
 
 // Se ejecuta antes de cada describe
 before((done) => {

@@ -5,10 +5,10 @@ const passport = require('passport');
 const axios = require('axios').default;
 
 // Llamamos a la funcuin de auth.js
-require('../auth')(passport);
+require('../tools/auth')(passport);
 
-const teamsController = require('../controllers/teams');
-const {getUser} = require('../controllers/users');
+const teamsController = require('./teams.controller');
+const {getUser} = require('../auth/users.controller');
 
 router.route('/')
     .get(passport.authenticate('jwt', {session: false}), (req, res, next) => {

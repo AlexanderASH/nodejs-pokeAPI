@@ -4,7 +4,7 @@
   "description": "Manejo de APIS",
   "main": "server.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha"
+    "test": "./node_modules/.bin/mocha **/**/*.test.js"
   },
   "repository": {
     "type": "git",
