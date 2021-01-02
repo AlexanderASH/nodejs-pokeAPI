@@ -1,5 +1,6 @@
 
 const express = require('express');
+const middlewares = require('./middlewares');
 const bodyParser = require('body-parser');
 
 //Routes
@@ -11,6 +12,7 @@ app.use(bodyParser.json());
 
 const port = 3000;
 
+middlewares.setupMiddlewares(app);
 app.get('/',(req, res) => {
     // req es la request, la peticion
     // res es la respuesta
