@@ -16,9 +16,8 @@ before((done) => {
 });
 
 // Se ejecuta despues de cada It
-afterEach((done) => {
-    teamController.cleanUpTeam();
-    done();
+afterEach(async () => {
+    await teamController.cleanUpTeam();
 });
 
 describe('Suite de prueba teams',() => {
@@ -123,6 +122,41 @@ describe('Suite de prueba teams',() => {
                                     }
                                 );
                             }
+                        );
+                    }
+                );
+            }
+        );
+    });
+    it('should not be able to add pokemon if you already have 6', (done) => {
+        let team = [
+            {name: 'Charizard'},
+            {name: 'Blastoise'},
+            {name: 'Pikachu'},
+            {name: 'Pikachu'},
+            {name: 'Pikachu'},
+            {name: 'Pikachu'},
+        ];
+        chai.request(app)
+            .post('/auth/login')
+            .set('Content-type', 'application/json')
+            .send({user: 'pcua', password: 'root2020'})
+            .end((err, res) => {
+                let token = res.body.token;
+                chai.assert.equal(res.status, 200);
+                chai.request(app)
+                    .put('/teams')
+                    .send({team: team})
+                    .set('Authorization', `JWT ${token}`)
+                    .end((err, res) => {
+                        chai.request(app)
+                            .post('/teams/pokemons')
+                            .send({name: 'Vibrava'})
+                            .set('Authorization', `JWT ${token}`)
+                            .end((err, res) => {
+                                chai.assert.equal(res.status, 400);
+                                done();
+                            }    
                         );
                     }
                 );
