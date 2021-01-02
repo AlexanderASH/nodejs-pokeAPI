@@ -23,7 +23,7 @@ const getTeamOfUser = (userId) => {
 const addPokemon = (userId, pokemon) => {
     return new Promise((resolve, reject) => {
         if(teamsDataBase[userId].length == 6){
-            reject();
+            reject('Already have 6 pokemon');
         }else{
             teamsDataBase[userId].push(pokemon);
             resolve();

@@ -2,6 +2,7 @@ const axios = require('axios').default;
 
 const teamsController = require('./teams.controller');
 const {getUser} = require('../auth/users.controller');
+const {to} = require('../tools/to');
 
 const getTeamFromUser = async (req, res) => {
     let user = getUser(req.user.userId);
@@ -20,21 +21,29 @@ const setTeamToUser = (req, res) => {
 const addPokemonToTeam = async (req, res) => {
     let pokemonName = req.body.name;
 
-    let pokeApiResponse = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`);
+    let [pokeApiError, pokeApiResponse] = await to(axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`));
     
+    if(pokeApiError){
+        return res.status(400).json({
+            message: pokeApiError
+        });
+    }
+
     let pokemon = {
         name: pokemonName, 
         pokedexNumber: pokeApiResponse.data.id
     };
     
-    try {
-        await teamsController.addPokemon(req.user.userId, pokemon);
-        return res.status(201).json(pokemon);
-    } catch (error) {
+    let [errorAdd, response] = await to(teamsController.addPokemon(req.user.userId, pokemon));
+    
+    if(errorAdd){
         return res.status(400).json({
             message: 'You have already 6 pokemon'
+
         });
     }
+
+    return res.status(201).json(pokemon);
 };
 
 const deletePokemonFromTeam = (req, res) => {
