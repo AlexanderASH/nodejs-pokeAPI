@@ -11,7 +11,10 @@ const cleanUpTeam = () => {
 };
 
 const bootstrapTeam = (userId) => {
-    teamsDataBase[userId] = [];
+    return new Promise((resolve, reject) => {
+        teamsDataBase[userId] = [];
+        resolve();
+    });
 };
 
 const getTeamOfUser = (userId) => {
@@ -33,13 +36,19 @@ const addPokemon = (userId, pokemon) => {
 
 const deletePokemonAt = (userId, index) => {
     console.log('DELETE', userId, index);
-    if(teamsDataBase[userId][index]){
-        teamsDataBase[userId].splice(index, 1);
-    }
+    return new Promise((resolve, reject) => {
+        if(teamsDataBase[userId][index]){
+            teamsDataBase[userId].splice(index, 1);
+        }
+        resolve();
+    });
 };
 
 const setTeam = (userId, team) => {
-    teamsDataBase[userId] = team;
+    return new Promise((resolve, reject) => {
+        teamsDataBase[userId] = team;
+        resolve();
+    });
 };
 
 exports.cleanUpTeam = cleanUpTeam;
