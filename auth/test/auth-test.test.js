@@ -4,14 +4,19 @@ const chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
 
+const userController = require('../users.controller');
+const teamsController = require('../../teams/teams.controller');
+
 const app = require('../../server').app;
 
-const userController = require('../users.controller');
+beforeEach(async () => {
+    await userController.registerUser('pcua', 'root2020');
+    // await userController.registerUser('wendy', 'root2020');
+});
 
-before((done) => {
-    userController.registerUser('pcua', 'root2020');
-    userController.registerUser('wendy', 'root2020');
-    done();
+afterEach(async () => {
+    await userController.cleanUpUsers();
+    await teamsController.cleanUpTeam();
 });
 
 describe('Suite de pruebas auth', () => {
@@ -39,7 +44,7 @@ describe('Suite de pruebas auth', () => {
     it('should return 200 and token for succesful login', (done) => {
         chai.request(app)
             .post('/auth/login')
-            .set('content-type', 'application/json')
+            .set('Content-type', 'application/json')
             .send({user: 'pcua', password: 'root2020'})
             .end((err, res) => {
                 chai.assert.equal(res.status, 200);
@@ -68,7 +73,7 @@ describe('Suite de pruebas auth', () => {
     });
 });
 
-after((done) => {
-    userController.cleanUpUsers();
-    done();
-});
+// after((done) => {
+//     userController.cleanUpUsers();
+//     done();
+// });

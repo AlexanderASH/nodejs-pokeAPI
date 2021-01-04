@@ -3,20 +3,20 @@ const chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
 
-const app = require('../../server').app;
-
 const userController = require('../../auth/users.controller');
 const teamController = require('../teams.controller');
 
+const app = require('../../server').app;
+
 // Se ejecuta antes de cada describe
-before((done) => {
-    userController.registerUser('pcua', 'root2020');
-    userController.registerUser('wendy', 'root2020');
-    done();
+beforeEach(async () => {
+    await userController.registerUser('pcua', 'root2020');
+    await userController.registerUser('wendy', 'root2020');
 });
 
 // Se ejecuta despues de cada It
 afterEach(async () => {
+    await userController.cleanUpUsers();
     await teamController.cleanUpTeam();
 });
 
@@ -166,7 +166,7 @@ describe('Suite de prueba teams',() => {
 });
 
 // Se ejecuta despues de un describe
-after((done) => {
-    userController.cleanUpUsers();
-    done();
-});
+// after((done) => {
+//     userController.cleanUpUsers();
+//     done();
+// });
